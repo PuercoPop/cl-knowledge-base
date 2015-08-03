@@ -10,4 +10,11 @@
                #:clack
                #:babel)
   :pathname "src/"
-  :components ((:file "cl-knowledge-base")))
+  :serial t
+  :components ((:file "package")
+               (:file "model")
+               (:file "serialization" :depends-on ("model"))
+               (:file "templates")
+               (:file "controllers" :depends-on ("model"))
+               (:file "router" :depends-on ("controllers"))
+               (:file "cl-knowledge-base")))
