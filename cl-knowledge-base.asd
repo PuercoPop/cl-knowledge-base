@@ -7,11 +7,15 @@
                #:trivia
                #:trivia.ppcre
                #:spinneret
+               #:cl-rethinkdb
+               #:cl-async
+               #:blackbird
                #:clack
                #:babel)
   :pathname "src/"
   :serial t
   :components ((:file "package")
+               (:file "db")
                (:file "model")
                (:file "serialization" :depends-on ("model"))
                (:file "templates")
