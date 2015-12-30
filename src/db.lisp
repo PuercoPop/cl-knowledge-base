@@ -7,10 +7,10 @@
 (defmacro with-db ((socket-name &key (host *host*) (port *port*))
                    &body body)
   "Run the BODY with a socket bound to SOCKET-NAME "
-  `(unwind-protect
-        (alet ((,socket-name (connect ,host ,port)))
-          ,@body)
-     (disconnect ,socket-name)))
+  `(alet ((,socket-name (connect ,host ,port)))
+     (unwind-protect (progn
+                       ,@body)
+       (disconnect ,socket-name))))
 
 (defmacro with-query ((query result) &body body)
   "Run the BODY with the result of QUERY bound to RESULT "
