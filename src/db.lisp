@@ -8,13 +8,13 @@
                    &body body)
   "Run the BODY with a socket bound to SOCKET-NAME "
   `(alet ((,socket-name (connect ,host ,port)))
-     (unwind-protect (progn
-                       ,@body)
+     (finally (progn
+                ,@body)
        (disconnect ,socket-name))))
 
-(defmacro with-query ((query result) &body body)
+(defmacro with-query ((result query) &body body)
   "Run the BODY with the result of QUERY bound to RESULT "
   (with-gensyms (socket-name)
     `(with-db (,socket-name)
-       (let ((,result (run ,socket-name ,query)))
+       (alet ((,result (run ,socket-name (r ,query))))
          ,@body))))
