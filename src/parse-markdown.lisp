@@ -1,7 +1,7 @@
 (in-package #:cl-knowledge-base)
 
 (defparameter +header-sigil+ "----"
-  "the sigil that separates the header from the markdown document.")
+  "The sigil that separates the header from the markdown document.")
 
 (defun parse-question (path)
   "Read question from file at `path'."
@@ -10,7 +10,8 @@
           (tags nil)
           (body))
       (unless (string= +header-sigil+ (read-line in))
-        (error "File ~A does not start with ~A" path +header-sigil+))
+        (restart-case (error "File ~A~% does not start with the proper sigil, ~A" path +header-sigil+)
+          (skip-error () 'skipped)))
 
       (loop
         :for line := (read-line in)
@@ -29,17 +30,19 @@
                                               :for line := (read-line in nil nil)
                                               :until (null line)
                                               :collect line))))
-      (make-instance 'document :title title :tags tags :body body))))
+      (make-instance 'question :title title :tags tags :body body))))
 
-(defun write-as-file (question &optional stream)
-  "Write to `stream' the `question' as it could be read."
+(defun write-as-file (question &optional (stream t))
+  "Write to STREAM the QUESTION as it could be read."
+  ;;; XXX: Add references/see also as a final header
   (format stream "~A~%" +header-sigil+)
   (format stream "title: ~A~%" (title question))
   (format stream "tags: ~{~A~^, ~}~%" (tags question))
   (format stream "~A~%" +header-sigil+)
-  (format stream "~A" (%body question)))
+  (format stream "~A" (source question)))
 
 (defun load-questions (root-path)
   "Load the questions from the `root-path' directory to image."
   (setf *questions*
-        (mapcar #'parse-question (uiop/filesystem:directory-files root-path))))
+        (mapcar #'parse-question
+                (uiop/filesystem:directory-files root-path))))
