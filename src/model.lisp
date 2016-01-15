@@ -3,6 +3,10 @@
 (defvar *questions* nil
   "A list of questions")
 
+(defun create-tables ()
+  #+(or)(do-query (:create-table))
+  (with-query (nil (:table-create "questions"))))
+
 (defclass question ()
   ((title :initarg :title
           :reader title)

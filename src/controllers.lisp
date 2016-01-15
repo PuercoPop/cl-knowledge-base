@@ -20,3 +20,13 @@
                 :collect (:h2 (title question))
               :when (member tag-name (tags question) :test #'string=)
                 :collect (:raw (body question)))))))
+
+#+(or)
+(defun question-page (question-id)
+  ""
+  (destructuring-bind (title body) (retrieve-question question-id)
+    `(200
+      (:content-type "text/html")
+      ,(babel:string-to-octets
+        (with:page (:title title))
+        body))))

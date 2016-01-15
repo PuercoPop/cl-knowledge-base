@@ -19,6 +19,7 @@
                (:file "db")
                (:file "model")
                (:file "parse-scriba" :depends-on ("model"))
+               (:file "parse-markdown" :depends-on ("model"))
                (:file "templates")
                (:file "controllers" :depends-on ("model"))
                (:file "router" :depends-on ("controllers"))

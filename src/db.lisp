@@ -14,7 +14,9 @@
 
 (defmacro with-query ((result query) &body body)
   "Run the BODY with the result of QUERY bound to RESULT "
-  (with-gensyms (socket-name)
-    `(with-db (,socket-name)
-       (alet ((,result (run ,socket-name (r ,query))))
-         ,@body))))
+  (with-unique-names (query-result)
+    (with-gensyms (socket-name)
+      `(with-db (,socket-name)
+         (alet ((,query-result (run ,socket-name (r ,query))))
+           (progv '(,result) ,query-result
+               ,@body))))))
