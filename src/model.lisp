@@ -48,12 +48,6 @@
         tag
         (make-instance 'tag :name name))))
 
-#+(or)
 (defun list-tags ()
   "Return a list of all the tags used by the questions."
-  (remove-duplicates
-   (loop
-      :for question :in *questions*
-      :append (match question
-                     ((class question :tags tags) tags)))
-   :test #'string=))
+  (select-instances (tag tag)))
