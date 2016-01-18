@@ -21,7 +21,7 @@
                                        ("title" (setf title value))
                                        ("tags" (setf tags
                                                      (mapcar #'(lambda (string)
-                                                                 (string-trim " " string))
+                                                                 (ensure-tag (string-trim " " string)))
                                                              (split-sequence:split-sequence #\, value))))))))
 
       (setf body (markdown.cl:parse (format nil
@@ -30,7 +30,7 @@
                                               :for line := (read-line in nil nil)
                                               :until (null line)
                                               :collect line))))
-      (make-instance 'question :title title :tags tags :body body))))
+      (make-instance 'document :title title :tags tags :body body))))
 
 (defun write-as-file (question &optional (stream t))
   "Write to STREAM the QUESTION as it could be read."
@@ -43,6 +43,6 @@
 
 (defun load-questions (root-path)
   "Load the questions from the `root-path' directory to image."
-  (setf *questions*
-        (mapcar #'parse-question
-                (uiop/filesystem:directory-files root-path))))
+  (with-transaction
+    (mapcar #'parse-question
+            (uiop/filesystem:directory-files root-path))))

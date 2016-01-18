@@ -4,6 +4,13 @@
   "The address of the database")
 (defvar *port* 28015)
 
+(defvar *database*
+  (make-instance 'postgresql/perec
+                 :connection-specification '(:database  "cl-knowledge-base"
+                                             :user-name "puercopop"
+                                             :host :unix
+                                             :password nil)))
+
 (defmacro with-db ((socket-name &key (host *host*) (port *port*))
                    &body body)
   "Run the BODY with a socket bound to SOCKET-NAME "

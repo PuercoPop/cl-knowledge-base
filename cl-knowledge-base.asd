@@ -4,10 +4,9 @@
   :license "<3"
   :depends-on (#:alexandria
                #:babel
-               #:blackbird
                #:clack
-               #:cl-async
-               #:cl-rethinkdb
+               #:hu.dwim.perec.postgresql
+               #:hu.dwim.perec
                #:markdown.cl
                #:spinneret
                #:split-sequence

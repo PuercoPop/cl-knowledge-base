@@ -1,11 +1,11 @@
 (defpackage #:cl-knowledge-base
   (:use #:cl
         #:alexandria
-        #:blackbird
-        #:cl-async
-        #:cl-rethinkdb
+        #:hu.dwim.perec
         #:trivia
         #:trivia.ppcre)
+  (:shadowing-import-from #:hu.dwim.perec
+                          #:set)
   (:documentation "A Q&A site.
 
 /: The top level shows all the tags.
