@@ -1,6 +1,7 @@
 (defpackage #:cl-knowledge-base
   (:use #:cl
         #:alexandria
+        #:hunchentoot
         #:hu.dwim.perec
         #:trivia
         #:trivia.ppcre)

@@ -4,7 +4,7 @@
   :license "<3"
   :depends-on (#:alexandria
                #:babel
-               #:clack
+               #:hunchentoot
                #:hu.dwim.perec.postgresql
                #:hu.dwim.perec
                #:markdown.cl
@@ -21,5 +21,4 @@
                (:file "parse-markdown" :depends-on ("model"))
                (:file "templates")
                (:file "controllers" :depends-on ("model"))
-               (:file "router" :depends-on ("controllers"))
                (:file "cl-knowledge-base")))

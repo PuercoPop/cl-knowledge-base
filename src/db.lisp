@@ -1,14 +1,14 @@
 (in-package #:cl-knowledge-base)
 
-(defvar *host* "127.0.0.1"
+(defvar *db-host* :unix
   "The address of the database")
-(defvar *port* 28015)
+(defvar *db-port* 28015)
 
 (defvar *database*
   (make-instance 'postgresql/perec
                  :connection-specification '(:database  "cl-knowledge-base"
                                              :user-name "puercopop"
-                                             :host :unix
+                                             :host *db-host*
                                              :password nil)))
 
 (defmacro with-db ((socket-name &key (host *host*) (port *port*))

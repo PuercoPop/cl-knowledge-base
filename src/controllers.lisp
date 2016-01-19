@@ -1,25 +1,27 @@
 (in-package #:cl-knowledge-base)
 
-(defun top-level ()
-  "The entry point to the Q&A portal."
-  `(200 (:content-type "text/html")
-        ,(babel:string-to-octets
-          (with-page (:title "Cl Q&A")
-            (:ul (loop :for tag :in (list-tags)
-                       :collect (:li (:a :href (format nil "/tag/~A/" tag)
-                                         tag))))))))
+(defun clear-routes ()
+  (setf *dispatch-table* (last *dispatch-table*)))
 
-(defun tag-page (tag-name)
+(define-easy-handler (top-level :uri "/") ()
+  "The entry point to the Q&A portal."
+  (with-transaction
+    (show-tags (list-tags))))
+
+(let ((url-regexp "^/tag/(\\w+)/$"))
+  (defun tag-detail ()
+    (match (script-name *request*)
+      ((ppcre "/tag/(\\w+)/$" tag-name)
+       (with-transaction
+         (when-let ((tag (get-tag-by-name tag-name)))
+           (show-tag tag))))))
+  (push (create-regex-dispatcher url-regexp #'tag-detail)
+        *dispatch-table*))
+
+(define-easy-handler (document-detail :uri "/tag/") (tag-name)
   "Lists the questions tagged `tag-name'"
-  `(200 (:content-type "text/html")
-        ,(babel:string-to-octets
-          (with-page (:title tag-name)
-            (loop
-              :for question :in *questions*
-              :when (member tag-name (tags question) :test #'string=)
-                :collect (:h2 (title question))
-              :when (member tag-name (tags question) :test #'string=)
-                :collect (:raw (body question)))))))
+  (with-transaction
+    (show-tag (get-tag-by-name tag-name))))
 
 #+(or)
 (defun question-page (question-id)

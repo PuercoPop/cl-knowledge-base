@@ -19,10 +19,6 @@
          :type text
          :reader body)))
 
-;; The value #S(HU.DWIM.PEREC::UNBOUND-SLOT-MARKER)
-;; in slot SOURCE of instance #< What is the diff between ()> is not of type
-;; TEXT.
-
 (defpassociation*
   ((:class document :slot tags :type (set tag))
    (:class tag :slot tagged-documents :type (set document))))
@@ -41,9 +37,12 @@
     (princ (title obj))
     #+(or)(format stream "~A (~[~A~^,~])" (title obj) (tags obj))))
 
+(defun get-tag-by-name (tag-name)
+  (select-instance (tag tag)
+    (where (equalp (tag-name tag) tag-name))))
+
 (defun ensure-tag (name)
-  (let ((tag (select-instance (tag tag)
-               (where (equalp (tag-name tag) name)))))
+  (let ((tag (get-tag-by-name name)))
     (if tag
         tag
         (make-instance 'tag :name name))))

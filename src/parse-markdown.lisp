@@ -37,7 +37,7 @@
   ;;; XXX: Add references/see also as a final header
   (format stream "~A~%" +header-sigil+)
   (format stream "title: ~A~%" (title question))
-  (format stream "tags: ~{~A~^, ~}~%" (tags question))
+  (format stream "tags: ~{~A~^, ~}~%" (tags-of question))
   (format stream "~A~%" +header-sigil+)
   (format stream "~A" (source question)))
 
