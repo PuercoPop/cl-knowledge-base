@@ -1,7 +1,7 @@
 (in-package #:cl-knowledge-base)
 
 (defvar *server* nil
-  "Clack handler. Useful for when one wants to stop the server.")
+  "Hunchentoot server. Useful for when one wants to stop the server.")
 
 (defvar *http-host* "127.0.0.1")
 
