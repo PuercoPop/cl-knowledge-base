@@ -6,9 +6,9 @@
 
 (defvar *database*
   (make-instance 'postgresql/perec
-                 :connection-specification '(:database  "cl-knowledge-base"
+                 :connection-specification `(:database  "cl-knowledge-base"
                                              :user-name "puercopop"
-                                             :host *db-host*
+                                             :host ,*db-host*
                                              :password nil)))
 
 
