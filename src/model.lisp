@@ -49,3 +49,7 @@
 (defun list-tags ()
   "Return a list of all the tags used by the questions."
   (select-instances (tag tag)))
+
+(defun get-question-by-id (oid)
+  (select-instance (question document)
+    (where (equalp (oid-of question) oid))))

@@ -17,6 +17,11 @@
 (defun show-tag (tag)
   (with-page (:title (tag-name tag))
     (:ul (loop :for document :in (tagged-documents-of tag)
-               :collect (:li (:a :href (format nil "/question/?id=~A"
+               :collect (:li (:a :href (format nil "/question/~A/"
                                                (oid-of document))
                                  (title document)))))))
+
+(defun show-document (document)
+  (with-page (:title (title document))
+    (:h2 (title document))
+    (:div (body document))))

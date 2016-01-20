@@ -11,24 +11,20 @@
 (let ((url-regexp "^/tag/(\\w+)/$"))
   (defun tag-detail ()
     (match (script-name *request*)
-      ((ppcre "/tag/(\\w+)/$" tag-name)
+      ((ppcre url-regexp tag-name)
        (with-transaction
          (when-let ((tag (get-tag-by-name tag-name)))
            (show-tag tag))))))
   (push (create-regex-dispatcher url-regexp #'tag-detail)
         *dispatch-table*))
 
-(define-easy-handler (document-detail :uri "/tag/") (tag-name)
-  "Lists the questions tagged `tag-name'"
-  (with-transaction
-    (show-tag (get-tag-by-name tag-name))))
-
-#+(or)
-(defun question-page (question-id)
-  ""
-  (destructuring-bind (title body) (retrieve-question question-id)
-    `(200
-      (:content-type "text/html")
-      ,(babel:string-to-octets
-        (with:page (:title title))
-        body))))
+(let ((url-regexp "^/question/(\\d+)/$"))
+  (defun document-detail ()
+    "Lists the questions tagged `tag-name'"
+    (match (script-name *request*)
+      ((ppcre url-regexp question-id)
+       (with-transaction
+         (when-let ((question (get-question-by-id (parse-integer question-id))))
+           (show-document question))))))
+  (push (create-regex-dispatcher url-regexp #'document-detail)
+        *dispatch-table*))
