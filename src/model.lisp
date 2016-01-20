@@ -34,8 +34,7 @@
 
 (defmethod print-object ((obj document) stream)
   (print-unreadable-object (obj stream :type t)
-    (princ (title obj))
-    #+(or)(format stream "~A (~[~A~^,~])" (title obj) (tags obj))))
+    (princ (title obj) stream)))
 
 (defun get-tag-by-name (tag-name)
   (select-instance (tag tag)
