@@ -17,5 +17,7 @@
                                           :address *http-host*
                                           :port *http-port*))))
 
-#+(or)(load-questions
-   (asdf:system-relative-pathname :cl-knowledge-base "knowledge-base/"))
+(defun populate-database ()
+  "Load the questions to the database."
+  (load-questions
+   (asdf:system-relative-pathname :cl-knowledge-base "knowledge-base/")))

@@ -6,7 +6,7 @@
          :initform nil
          :reader tag-name)))
 
-(defpclass document ()
+(defpclass question ()
   ((title :initarg :title
           :type text
           :reader title)
@@ -20,19 +20,19 @@
          :reader body)))
 
 (defpassociation*
-  ((:class document :slot tags :type (set tag))
-   (:class tag :slot tagged-documents :type (set document))))
+  ((:class question :slot tags :type (set tag))
+   (:class tag :slot tagged-questions :type (set question))))
 
 (defpassociation*
-  ((:class document :slot references :type (set document) :reader references)
-   (:class document :slot referenced-by :type(set document) :reader referenced-by)))
+  ((:class question :slot references :type (set question) :reader references)
+   (:class question :slot referenced-by :type(set question) :reader referenced-by)))
 
 
 (defmethod print-tag ((obj tag) stream)
   (print-unreadable-object (obj stream :type t)
     (princ (tag-name obj))))
 
-(defmethod print-object ((obj document) stream)
+(defmethod print-object ((obj question) stream)
   (print-unreadable-object (obj stream :type t)
     (princ (title obj) stream)))
 
@@ -51,5 +51,5 @@
   (select-instances (tag tag)))
 
 (defun get-question-by-id (oid)
-  (select-instance (question document)
+  (select-instance (question question)
     (where (equalp (oid-of question) oid))))

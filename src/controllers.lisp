@@ -19,12 +19,12 @@
         *dispatch-table*))
 
 (let ((url-regexp "^/question/(\\d+)/$"))
-  (defun document-detail ()
+  (defun question-detail ()
     "Lists the questions tagged `tag-name'"
     (match (script-name *request*)
       ((ppcre url-regexp question-id)
        (with-transaction
          (when-let ((question (get-question-by-id (parse-integer question-id))))
-           (show-document question))))))
-  (push (create-regex-dispatcher url-regexp #'document-detail)
+           (show-question question))))))
+  (push (create-regex-dispatcher url-regexp #'question-detail)
         *dispatch-table*))

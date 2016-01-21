@@ -30,7 +30,7 @@
                                               :for line := (read-line in nil nil)
                                               :until (null line)
                                               :collect line))))
-      (make-instance 'document :title title :tags tags :body body))))
+      (make-instance 'question :title title :tags tags :body body))))
 
 (defun write-as-file (question &optional (stream t))
   "Write to STREAM the QUESTION as it could be read."

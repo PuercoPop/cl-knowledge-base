@@ -16,12 +16,12 @@
 
 (defun show-tag (tag)
   (with-page (:title (tag-name tag))
-    (:ul (loop :for document :in (tagged-documents-of tag)
+    (:ul (loop :for question :in (tagged-questions-of tag)
                :collect (:li (:a :href (format nil "/question/~A/"
-                                               (oid-of document))
-                                 (title document)))))))
+                                               (oid-of question))
+                                 (title question)))))))
 
-(defun show-document (document)
-  (with-page (:title (title document))
-    (:h2 (title document))
-    (:div (body document))))
+(defun show-question (question)
+  (with-page (:title (title question))
+    (:h2 (title question))
+    (:div (body question))))
