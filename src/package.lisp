@@ -1,10 +1,14 @@
 (defpackage #:cl-knowledge-base
   (:use #:cl
         #:alexandria
-        #:hunchentoot
         #:hu.dwim.perec
+        #:snooze
         #:trivia
         #:trivia.ppcre)
+  (:import-from #:hunchentoot
+                #:*dispatch-table*
+                #:define-easy-handler
+                #:easy-acceptor)
   (:shadowing-import-from #:hu.dwim.perec
                           #:set)
   (:documentation "A Q&A site.

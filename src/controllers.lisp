@@ -8,6 +8,15 @@
   (with-transaction
     (show-tags (list-tags))))
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defroute tag (:get :text/* tag-name)
+    (with-transaction
+      (when-let ((tag (get-tag-by-name tag-name)))
+        (show-tag tag)))))
+
+(defgenpath tag url-for-tag)
+
+#+(or)
 (let ((url-regexp "^/tag/(\\w+)/$"))
   (defun tag-detail ()
     (match (script-name *request*)
@@ -18,6 +27,16 @@
   (push (create-regex-dispatcher url-regexp #'tag-detail)
         *dispatch-table*))
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defroute question (:get :text/* question-id)
+    "Lists the questions tagged `tag-name'"
+    (with-transaction
+      (when-let ((question (get-question-by-id (parse-integer question-id))))
+        (show-question question)))))
+
+(defgenpath question url-for-question)
+
+#+(or)
 (let ((url-regexp "^/question/(\\d+)/$"))
   (defun question-detail ()
     "Lists the questions tagged `tag-name'"

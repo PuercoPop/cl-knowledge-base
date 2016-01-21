@@ -8,6 +8,7 @@
                #:hu.dwim.perec.postgresql
                #:hu.dwim.perec
                #:markdown.cl
+               #:snooze
                #:spinneret
                #:split-sequence
                #:trivia
