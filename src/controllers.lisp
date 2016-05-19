@@ -8,23 +8,28 @@
   (with-transaction
     (show-tags (list-tags))))
 
-(let ((url-regexp "^/tag/(\\w+)/$"))
-  (defun tag-detail ()
-    (match (script-name *request*)
-      ((ppcre url-regexp tag-name)
-       (with-transaction
-         (when-let ((tag (get-tag-by-name tag-name)))
-           (show-tag tag))))))
-  (push (create-regex-dispatcher url-regexp #'tag-detail)
-        *dispatch-table*))
+(defmacro define-regexp-route (name (url-regexp &rest capture-names) &body body)
+  (multiple-value-bind (body declarations documentation)
+      (parse-body body :documentation t)
+    `(progn
+       (defun ,name ()
+         ,@(when documentation
+             (list documentation))
+         ,@declarations
+         (match (script-name *request*)
+           ((ppcre ,url-regexp ,@capture-names)
+            ,@body)))
+       (push (create-regex-dispatcher ,url-regexp #',name)
+             *dispatch-table*))))
 
-(let ((url-regexp "^/question/(\\d+)/$"))
-  (defun question-detail ()
-    "Lists the questions tagged `tag-name'"
-    (match (script-name *request*)
-      ((ppcre url-regexp question-id)
-       (with-transaction
-         (when-let ((question (get-question-by-id (parse-integer question-id))))
-           (show-question question))))))
-  (push (create-regex-dispatcher url-regexp #'question-detail)
-        *dispatch-table*))
+(define-regexp-route tag-detail ("^/tag/(\\w+)/$" tag-name)
+  "List all the questions tagged TAG-NAME."
+  (with-transaction
+    (when-let ((tag (get-tag-by-name tag-name)))
+      (show-tag tag))))
+
+(define-regexp-route question-detail ("^/question/(\\d+)/$" question-id)
+  "Renders the question with QUESTION-ID."
+  (with-transaction
+    (when-let ((question (get-question-by-id (parse-integer question-id))))
+      (show-question question))))
