@@ -28,9 +28,9 @@
    (:class question :slot referenced-by :type(set question) :reader referenced-by)))
 
 
-(defmethod print-tag ((obj tag) stream)
+(defmethod print-object ((obj tag) stream)
   (print-unreadable-object (obj stream :type t)
-    (princ (tag-name obj))))
+    (princ (tag-name obj) stream)))
 
 (defmethod print-object ((obj question) stream)
   (print-unreadable-object (obj stream :type t)
