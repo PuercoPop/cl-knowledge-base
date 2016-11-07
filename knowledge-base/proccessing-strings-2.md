@@ -1,7 +1,7 @@
-----
+-----
 title: How do I processing a String One Character at a Time
 tags: strings
-----
+-----
 
 Use the MAP function to process a string one character at a time.
 
