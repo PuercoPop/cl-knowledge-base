@@ -1,14 +1,4 @@
 (in-package #:cl-knowledge-base)
 
-(defvar *db-host* :unix
+(defvar +db-root+ (asdf:system-relative-pathname :cl-knowledge-base #P"db/")
   "The address of the database")
-(defvar *db-port* 28015)
-
-(defvar *database*
-  (make-instance 'postgresql/perec
-                 :connection-specification `(:database  "cl-knowledge-base"
-                                             :user-name "puercopop"
-                                             :host ,*db-host*
-                                             :password nil)))
-
-

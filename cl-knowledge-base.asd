@@ -4,9 +4,9 @@
   :license "<3"
   :depends-on (#:alexandria
                #:babel
+               #:closer-mop
                #:hunchentoot
-               #:hu.dwim.perec.postgresql
-               #:hu.dwim.perec
+               #:ironclad
                #:markdown.cl
                #:spinneret
                #:split-sequence
@@ -15,8 +15,9 @@
   :pathname "src/"
   :serial t
   :components ((:file "package")
+               (:file "util")
                (:file "db")
-               (:file "model")
+               (:file "model" :depends-on ("db" "util"))
                (:file "parse-scriba" :depends-on ("model"))
                (:file "parse-markdown" :depends-on ("model"))
                (:file "templates")

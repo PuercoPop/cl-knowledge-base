@@ -1,6 +1,6 @@
 (in-package #:cl-knowledge-base)
 
-(defparameter +header-sigil+ "----"
+(defparameter +header-sigil+ "-----"
   "The sigil that separates the header from the markdown document.")
 
 (defun parse-question (path)
@@ -21,7 +21,7 @@
                                        ("title" (setf title value))
                                        ("tags" (setf tags
                                                      (mapcar #'(lambda (string)
-                                                                 (ensure-tag (string-trim " " string)))
+                                                                 (string-trim " " string))
                                                              (split-sequence:split-sequence #\, value))))))))
 
       (setf body (markdown.cl:parse (format nil
@@ -30,19 +30,18 @@
                                               :for line := (read-line in nil nil)
                                               :until (null line)
                                               :collect line))))
-      (make-instance 'question :title title :tags tags :body body))))
+      (make-instance 'entry :title title :tags tags :body body))))
 
-(defun write-as-file (question &optional (stream t))
-  "Write to STREAM the QUESTION as it could be read."
+(defun write-as-file (entry &optional (stream t))
+  "Write to STREAM the ENTRY as it could be read."
   ;;; XXX: Add references/see also as a final header
   (format stream "~A~%" +header-sigil+)
-  (format stream "title: ~A~%" (title question))
-  (format stream "tags: ~{~A~^, ~}~%" (tags-of question))
+  (format stream "title: ~A~%" (title entry))
+  (format stream "tags: ~{~A~^, ~}~%" (tags-of entry))
   (format stream "~A~%" +header-sigil+)
-  (format stream "~A" (source question)))
+  (format stream "~A" (source entry)))
 
-(defun load-questions (root-path)
+(defun load-entries (root-path)
   "Load the questions from the `root-path' directory to image."
-  (with-transaction
-    (mapcar #'parse-question
-            (uiop/filesystem:directory-files root-path))))
+  (mapcar 'save-entry (mapcar 'parse-question
+                              (uiop/filesystem:directory-files root-path))))

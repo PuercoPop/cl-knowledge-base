@@ -5,8 +5,7 @@
 
 (define-easy-handler (top-level :uri "/") ()
   "The entry point to the Q&A portal."
-  (with-transaction
-    (show-tags (list-tags))))
+  (show-tags (list-tags)))
 
 (defmacro define-regexp-route (name (url-regexp &rest capture-names) &body body)
   (multiple-value-bind (body declarations documentation)
@@ -19,17 +18,15 @@
          (match (script-name *request*)
            ((ppcre ,url-regexp ,@capture-names)
             ,@body)))
-       (push (create-regex-dispatcher ,url-regexp #',name)
+       (push (create-regex-dispatcher ,url-regexp ',name)
              *dispatch-table*))))
 
 (define-regexp-route tag-detail ("^/tag/(\\w+)/$" tag-name)
   "List all the questions tagged TAG-NAME."
-  (with-transaction
-    (when-let ((tag (get-tag-by-name tag-name)))
-      (show-tag tag))))
+  (when-let ((tag (get-tag-by-name tag-name)))
+    (show-tag tag)))
 
 (define-regexp-route question-detail ("^/question/(\\d+)/$" question-id)
   "Renders the question with QUESTION-ID."
-  (with-transaction
-    (when-let ((question (get-question-by-id (parse-integer question-id))))
-      (show-question question))))
+  (when-let ((question (get-question-by-id (parse-integer question-id))))
+    (show-question question)))
